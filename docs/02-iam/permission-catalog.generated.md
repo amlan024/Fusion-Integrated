@@ -13,6 +13,24 @@ For the intended taxonomy of modules not yet built, see
 |---|---|---|
 | `directory.user.search` | Search the institute directory | `Dean Academic`, `acadadmin`, `placement_chairman`, `placement_coordinator`, `placement_officer` |
 
+## `leave`
+
+| Code | What it allows | Held by |
+|---|---|---|
+| `leave.application.view_self` | View own leave applications | `employee`, `faculty`, `staff` |
+| `leave.application.create` | Submit a leave application | `employee`, `faculty`, `staff` |
+| `leave.application.withdraw` | Withdraw a pending application | `employee`, `faculty`, `staff` |
+| `leave.application.review` | Review leave applications | `leave_administrator` |
+| `leave.application.decide` | Make final leave decisions | `leave_administrator` |
+| `leave.balance.view_self` | View own leave balances | `employee`, `faculty`, `staff` |
+| `leave.policy.manage` | Manage leave policy | `leave_administrator` |
+| `leave.calendar.manage` | Manage holiday and RH calendars | `leave_administrator` |
+| `leave.record.manage` | Record previously sanctioned leave | `leave_administrator` |
+| `leave.report.view` | View leave reports | `leave_administrator` |
+| `leave.workflow.remind` | Send workflow reminders | _service only_ |
+| `leave.workflow.escalate` | Escalate overdue workflow tasks | _service only_ |
+| `leave.year_end.process` | Process year-end leave balances | _service only_ |
+
 ## `placement_cell`
 
 | Code | What it allows | Held by |

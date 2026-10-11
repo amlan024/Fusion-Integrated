@@ -34,6 +34,102 @@
       "scope_permissions": [],
       "system_permissions": []
     },
+    "leave": {
+      "grants": {
+        "employee": [
+          "leave.application.create",
+          "leave.application.view_self",
+          "leave.application.withdraw",
+          "leave.balance.view_self"
+        ],
+        "faculty": [
+          "leave.application.create",
+          "leave.application.view_self",
+          "leave.application.withdraw",
+          "leave.balance.view_self"
+        ],
+        "leave_administrator": [
+          "leave.application.decide",
+          "leave.application.review",
+          "leave.calendar.manage",
+          "leave.policy.manage",
+          "leave.record.manage",
+          "leave.report.view"
+        ],
+        "staff": [
+          "leave.application.create",
+          "leave.application.view_self",
+          "leave.application.withdraw",
+          "leave.balance.view_self"
+        ]
+      },
+      "module_grants": [
+        "employee",
+        "faculty",
+        "leave_administrator",
+        "staff"
+      ],
+      "permissions": [
+        {
+          "code": "leave.application.view_self",
+          "label": "View own leave applications"
+        },
+        {
+          "code": "leave.application.create",
+          "label": "Submit a leave application"
+        },
+        {
+          "code": "leave.application.withdraw",
+          "label": "Withdraw a pending application"
+        },
+        {
+          "code": "leave.application.review",
+          "label": "Review leave applications"
+        },
+        {
+          "code": "leave.application.decide",
+          "label": "Make final leave decisions"
+        },
+        {
+          "code": "leave.balance.view_self",
+          "label": "View own leave balances"
+        },
+        {
+          "code": "leave.policy.manage",
+          "label": "Manage leave policy"
+        },
+        {
+          "code": "leave.calendar.manage",
+          "label": "Manage holiday and RH calendars"
+        },
+        {
+          "code": "leave.record.manage",
+          "label": "Record previously sanctioned leave"
+        },
+        {
+          "code": "leave.report.view",
+          "label": "View leave reports"
+        },
+        {
+          "code": "leave.workflow.remind",
+          "label": "Send workflow reminders"
+        },
+        {
+          "code": "leave.workflow.escalate",
+          "label": "Escalate overdue workflow tasks"
+        },
+        {
+          "code": "leave.year_end.process",
+          "label": "Process year-end leave balances"
+        }
+      ],
+      "scope_permissions": [],
+      "system_permissions": [
+        "leave.workflow.escalate",
+        "leave.workflow.remind",
+        "leave.year_end.process"
+      ]
+    },
     "placement_cell": {
       "grants": {
         "Dean Academic": [
