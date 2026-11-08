@@ -100,8 +100,8 @@ class LeaveApplication(models.Model):
     half_day = models.CharField(
         max_length=10,
         choices=[("first", "First Half"), ("second", "Second Half")],
-        null=True,
         blank=True,
+        default="",
     )
     reason = models.TextField()
     status = models.CharField(
