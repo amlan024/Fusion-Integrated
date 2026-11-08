@@ -1,4 +1,8 @@
-"""Pure-Python state machine for ELM leave requests."""
+
+"""State transitions for the Employee Leave Management domain."""
+
+from modules.elm.domain.exceptions import InvalidLeaveTransitionError
+from modules.elm.domain.leave_types import CL, RH
 
 DRAFT = "draft"
 PENDING_SUBSTITUTE = "pending_substitute"
@@ -17,13 +21,15 @@ ACTIVE_PENDING_STATES = frozenset({
 })
 
 TERMINAL_STATES = frozenset({
-    APPROVED,
     REJECTED,
     WITHDRAWN,
     CANCELLED,
 })
 
-TRANSITIONS = {
+UNIT_HEAD_FINAL_TYPES = frozenset({CL, RH})
+
+# Transitions that do not depend on the leave category.
+COMMON_TRANSITIONS = {
     DRAFT: {
         "submit": PENDING_SUBSTITUTE,
         "submit_without_substitute": PENDING_UNIT_HEAD,
@@ -34,9 +40,6 @@ TRANSITIONS = {
         "withdraw": WITHDRAWN,
     },
     PENDING_UNIT_HEAD: {
-        "unit_head_approve": APPROVED,
-        "unit_head_recommend": PENDING_SANCTION,
-        "unit_head_not_recommend": PENDING_SANCTION,
         "withdraw": WITHDRAWN,
     },
     PENDING_SANCTION: {
@@ -54,16 +57,47 @@ TRANSITIONS = {
 }
 
 
-def allowed_actions(state: str) -> tuple[str, ...]:
-    """Return all actions available from a state."""
-    return tuple(TRANSITIONS.get(state, {}).keys())
+def allowed_actions(state: str, leave_type: str | None = None) -> tuple[str, ...]:
+    """Return actions permitted from a state for the given leave category."""
+    actions = dict(COMMON_TRANSITIONS.get(state, {}))
+
+    if state == PENDING_UNIT_HEAD and leave_type is not None:
+        if leave_type in UNIT_HEAD_FINAL_TYPES:
+            actions["unit_head_approve"] = APPROVED
+        else:
+            actions["unit_head_recommend"] = PENDING_SANCTION
+            actions["unit_head_not_recommend"] = PENDING_SANCTION
+
+    return tuple(actions)
 
 
-def transition(state: str, action: str) -> str:
-    """Return the next state or raise an error for an invalid transition."""
-    from modules.elm.domain.exceptions import InvalidLeaveTransitionError
+def transition(
+    state: str,
+    action: str,
+    leave_type: str | None = None,
+) -> str:
+    """Return the next state after validating the requested action."""
+    if state == PENDING_UNIT_HEAD:
+        if leave_type is None:
+            raise InvalidLeaveTransitionError(
+                "Leave category is required for Unit Head decisions."
+            )
 
-    next_state = TRANSITIONS.get(state, {}).get(action)
+        if leave_type in UNIT_HEAD_FINAL_TYPES:
+            transitions = {
+                "unit_head_approve": APPROVED,
+                "withdraw": WITHDRAWN,
+            }
+        else:
+            transitions = {
+                "unit_head_recommend": PENDING_SANCTION,
+                "unit_head_not_recommend": PENDING_SANCTION,
+                "withdraw": WITHDRAWN,
+            }
+    else:
+        transitions = COMMON_TRANSITIONS.get(state, {})
+
+    next_state = transitions.get(action)
 
     if next_state is None:
         raise InvalidLeaveTransitionError(
@@ -74,10 +108,10 @@ def transition(state: str, action: str) -> str:
 
 
 def is_pending(state: str) -> bool:
-    """Whether a request is awaiting an action."""
-    return state in ACTIVE_PENDING_STATES or state == PENDING_CANCELLATION
+    """Return whether a request is awaiting an approval-stage action."""
+    return state in ACTIVE_PENDING_STATES
 
 
 def is_terminal(state: str) -> bool:
-    """Whether a request has reached a terminal state."""
+    """Return whether a request has reached a terminal state."""
     return state in TERMINAL_STATES
