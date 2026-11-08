@@ -11,7 +11,7 @@ def to_decimal(value) -> Decimal:
     try:
         result = Decimal(str(value))
     except (InvalidOperation, TypeError, ValueError):
-        raise ElmDomainError("Invalid leave entitlement value.")
+        raise ElmDomainError("Invalid leave entitlement value.") from None
 
     if not result.is_finite() or result < Decimal("0"):
         raise ElmDomainError(
