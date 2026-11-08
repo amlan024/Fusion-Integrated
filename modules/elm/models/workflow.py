@@ -5,9 +5,7 @@ from django.db import models
 from django.db.models import Q
 
 from core.db.mixins import TimeStampedModel
-
 from modules.elm.models.leave_request import LeaveRequest
-
 
 class ApprovalRouteStep(TimeStampedModel):
     """One step in the currently configured approval hierarchy.
