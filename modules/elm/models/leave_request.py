@@ -131,7 +131,7 @@ class LeaveRequest(TimeStampedModel, UserScopedModel):
     def __str__(self):
         return (
             f"ELM-{self.pk or 'new'} u{self.user_id} "
-            f"{self.leave_type} {self.start_date}–{self.end_date}"
+            f"{self.leave_type} {self.start_date}-{self.end_date}"
         )
 
 
