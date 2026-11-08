@@ -6,9 +6,9 @@ Policy-dependent choices are passed explicitly by the caller.
 """
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import date, timedelta
 from decimal import Decimal
-from collections.abc import Iterable
 
 CL = "CL"
 RH = "RH"
